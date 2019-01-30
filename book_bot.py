@@ -13,18 +13,18 @@ def startCommand(bot, update):
 
 
 def textMessage(bot, update):
-    r = requests.get('https://flbapi.herokuapp.com/',params={'query': update.message.text})
+    r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text})
     if r.content:
         result = json.loads(r.content)
         for book in result:
             r_book = requests.get(book['link'])
             bot.send_message(chat_id=update.message.chat_id, text=r_book.status_code)
 
-            book_file = open(r'books/%s[%s]' % (book['name'], book['author']), 'wb')
+            book_file = open(r'books/%s[%s].epub' % (book['name'], book['author']), 'wb')
             book_file.write(r_book.content)
             book_file.close()
 
-            bot.send_document(chat_id=update.message.chat_id, document=open('books/%s[%s]' % (book['name'], book['author']), 'rb'))
+            bot.send_document(chat_id=update.message.chat_id, document=open('books/%s[%s].epub' % (book['name'], book['author']), 'rb'))
             #bot.send_message(chat_id=update.message.chat_id, text=book['name'])
 
 
