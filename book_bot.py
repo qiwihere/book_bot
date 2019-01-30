@@ -18,14 +18,14 @@ def textMessage(bot, update):
         result = json.loads(r.content)
         for book in result:
             r_book = requests.get(book['link'])
-            bot.send_message(chat_id=update.message.chat_id, text=r_book.status_code)
 
-            book_file = open(r'books/%s[%s].epub' % (book['name'], book['author']), 'wb')
+            book_file = open('book.epub', 'wb')
             book_file.write(r_book.content)
             book_file.close()
 
-            bot.send_document(chat_id=update.message.chat_id, document=open('books/%s[%s].epub' % (book['name'], book['author']), 'rb'))
-            #bot.send_message(chat_id=update.message.chat_id, text=book['name'])
+            bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
+            bot.send_document(chat_id=update.message.chat_id, document=open('book.epub', 'rb'))
+
 
 
 start_command_handler = CommandHandler('start', startCommand)
