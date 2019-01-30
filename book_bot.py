@@ -4,12 +4,12 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 token = '552105005:AAHdiHL9xU3gG4GTkDP44gKkjGy-OIaxI20'
 
-updater = Updater(token=token) # Токен API к Telegram
+updater = Updater(token=token)
 dispatcher = updater.dispatcher
 
 
 def startCommand(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='Я помогу тебе получить ту книгу, которую ты ищешь. Просто напиши ее названия, и я посмотрю, что у меня есть для тебя :)')
+    bot.send_message(chat_id=update.message.chat_id, text='Я помогу тебе получить ту книгу, которую ты ищешь. Просто напиши ее название, и я посмотрю, что у меня есть для тебя :)')
 
 
 def textMessage(bot, update):
@@ -17,7 +17,13 @@ def textMessage(bot, update):
     if r.content:
         result = json.loads(r.content)
         for book in result:
-            bot.send_message(chat_id=update.message.chat_id, text=book['name'])
+            r_book = requests.get(book['link'])
+            book_file = open(r'books/%s[%s]' % (book['name'], book['author']), 'wb')
+            book_file.write(r_book.content)
+            book_file.close()
+
+            bot.send_document(chat_id=update.message.chat_id, document=open('books/%s[%s]' % (book['name'], book['author']), 'rb'))
+            #bot.send_message(chat_id=update.message.chat_id, text=book['name'])
 
 
 start_command_handler = CommandHandler('start', startCommand)
