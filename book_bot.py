@@ -19,12 +19,13 @@ def textMessage(bot, update):
         for book in result:
             r_book = requests.get(book['link'])
 
-            book_file = open('book.epub', 'wb')
+            filename = '%s[%s].epub' % (book['name'], book['author'])
+            book_file = open(filename, 'wb')
             book_file.write(r_book.content)
             book_file.close()
 
             bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
-            bot.send_document(chat_id=update.message.chat_id, document=open('book.epub', 'rb'))
+            bot.send_document(chat_id=update.message.chat_id, document=open(filename, 'rb'))
 
 
 
