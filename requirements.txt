@@ -1,3 +1,4 @@
 python-telegram-bot
 requests
 transliterate
+rfc6266_parser
