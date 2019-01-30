@@ -29,7 +29,8 @@ def textMessage(bot, update):
 
             bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
             bot.send_document(chat_id=update.message.chat_id, document=open(filename, 'rb'))
-
+    else:
+        bot.send_message(chat_id=update.message.chat_id, text='Увы, я ничего не нашел')
 
 
 start_command_handler = CommandHandler('start', startCommand)
