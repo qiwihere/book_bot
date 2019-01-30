@@ -22,7 +22,6 @@ def textMessage(bot, update):
             r_book = requests.get(book['link'])
             filename = rfc6266.parse_requests_response(r_book).filename_unsafe
 
-            #filename = ('%s[%s]' % (translit(book['name'], 'ru', reversed=True), translit(book['author'], 'ru', reversed=True))).replace(' ', '_')
             book_file = open(filename, 'wb')
             book_file.write(r_book.content)
             book_file.close()
