@@ -1,4 +1,5 @@
 import requests
+import json
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 token = '552105005:AAHdiHL9xU3gG4GTkDP44gKkjGy-OIaxI20'
@@ -8,12 +9,15 @@ dispatcher = updater.dispatcher
 
 
 def startCommand(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='Привет, давай пообщаемся?')
+    bot.send_message(chat_id=update.message.chat_id, text='Я помогу тебе получить ту книгу, которую ты ищешь. Просто напиши ее названия, и я посмотрю, что у меня есть для тебя :)')
 
 
 def textMessage(bot, update):
-    response = 'Получил Ваше сообщение: ' + update.message.text
-    bot.send_message(chat_id=update.message.chat_id, text=response)
+    r = requests.get('https://flbapi.herokuapp.com/',params={'query': update.message.text})
+    if r.content:
+        result = json.loads(r.content)
+        for book in result:
+            bot.send_message(chat_id=update.message.chat_id, text=book['name'])
 
 
 start_command_handler = CommandHandler('start', startCommand)
