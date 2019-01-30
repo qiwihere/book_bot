@@ -19,7 +19,7 @@ def textMessage(bot, update):
         for book in result:
             r_book = requests.get(book['link'])
 
-            filename = '%s[%s].epub' % (translit(book['name'], 'ru', reversed=True), translit(book['author'], 'ru', reversed=True))
+            filename = ('%s[%s].epub' % (translit(book['name'], 'ru', reversed=True), translit(book['author'], 'ru', reversed=True))).replace(' ', '_')
             book_file = open(filename, 'wb')
             book_file.write(r_book.content)
             book_file.close()
