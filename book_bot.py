@@ -1,7 +1,7 @@
 import requests
 import json
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
+from transliterate import translit
 token = '552105005:AAHdiHL9xU3gG4GTkDP44gKkjGy-OIaxI20'
 
 updater = Updater(token=token)
@@ -19,7 +19,7 @@ def textMessage(bot, update):
         for book in result:
             r_book = requests.get(book['link'])
 
-            filename = '%s[%s].epub' % (book['name'], book['author'])
+            filename = '%s[%s].epub' % (translit(book['name'], 'ru', reversed=True), translit(book['author'], 'ru', reversed=True))
             book_file = open(filename, 'wb')
             book_file.write(r_book.content)
             book_file.close()
