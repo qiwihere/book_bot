@@ -35,7 +35,7 @@ def book_query(bot, update):
                 book_file.close()
                 bot.send_document(chat_id=update.message.chat_id, caption=('%s[%s]' % (book['name'], book['author'])), document=open(filename, 'rb'))
                 count += 1
-                if count > 6:
+                if count >= 6:
                     break
         else:
             bot.send_message(chat_id=update.message.chat_id, text='Увы, я ничего не нашел')
