@@ -18,20 +18,26 @@ def start_cmd(bot, update):
 @run_async
 def book_query(bot, update):
     r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text})
+    if not r.content:
+        r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text})
     if r.content:
         result = json.loads(r.content)
-        for book in result:
-            r_book = requests.get(book['link'])
-            if r_book.headers['content-type'] == 'text/html; charset=utf-8':
-                continue
+        if result:
+            for book in result:
+                r_book = requests.get(book['link'])
+                if r_book.headers['content-type'] == 'text/html; charset=utf-8':
+                    continue
 
-            filename = rfc6266.parse_requests_response(r_book).filename_unsafe
-            book_file = open(filename, 'wb')
-            book_file.write(r_book.content)
-            book_file.close()
+                filename = rfc6266.parse_requests_response(r_book).filename_unsafe
+                book_file = open(filename, 'wb')
+                book_file.write(r_book.content)
+                book_file.close()
 
-            bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
-            bot.send_document(chat_id=update.message.chat_id, document=open(filename, 'rb'))
+                bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
+                bot.send_document(chat_id=update.message.chat_id, document=open(filename, 'rb'))
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text='Увы, я ничего не нашел')
+
     else:
         bot.send_message(chat_id=update.message.chat_id, text='Увы, я ничего не нашел')
 
