@@ -14,7 +14,6 @@ dispatcher = updater.dispatcher
 def start_cmd(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text='365 395 книг и 132 763 автора бесплатно, быстро и удобно. Скачивайте свои любимые книги в формате EPUB. \n\nРугаться и любить сюда - @lipovoowa')
 
-
 @run_async
 def book_query(bot, update):
     r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text, 'chat_id': update.message.chat_id})
@@ -22,8 +21,9 @@ def book_query(bot, update):
         r = requests.get('https://flbapi.herokuapp.com/',  params={'query': update.message.text, 'chat_id': update.message.chat_id})
     if r.content:
         result = json.loads(r.content)
-        if result:
+        if bool(result):
             bot.send_message(chat_id=update.message.chat_id, text='Хм, посмотрим, что я смог найти:')
+            count = 0
             for book in result:
                 r_book = requests.get(book['link'])
                 if r_book.headers['content-type'] == 'text/html; charset=utf-8':
@@ -33,9 +33,10 @@ def book_query(bot, update):
                 book_file = open(filename, 'wb')
                 book_file.write(r_book.content)
                 book_file.close()
-
-                #bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
                 bot.send_document(chat_id=update.message.chat_id, caption=('%s[%s]' % (book['name'], book['author'])), document=open(filename, 'rb'))
+                count += 1
+                if count > 6:
+                    break
         else:
             bot.send_message(chat_id=update.message.chat_id, text='Увы, я ничего не нашел')
 
