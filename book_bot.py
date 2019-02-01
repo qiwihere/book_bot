@@ -24,7 +24,7 @@ def book_query(bot, update):
             r_book = requests.get(book['link'])
             filename = rfc6266.parse_requests_response(r_book).filename_unsafe
 
-            if not filename:
+            if not filename or filename == 'application.octet-stream':
                 continue
 
             book_file = open(filename, 'wb')
