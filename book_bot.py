@@ -12,7 +12,7 @@ dispatcher = updater.dispatcher
 
 @run_async
 def start_cmd(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='365 395 книг и 132 763 автора бесплатно, быстро и удобно. Скачивайте свои любимые книги в формате EPUB. \n\nРугаться и любить сюда - @lipovoowa')
+    bot.send_message(chat_id=update.message.chat_id, text='365 395 книг и 132 763 автора бесплатно, быстро и удобно. Скачивайте свои любимые книги в формате EPUB. Для поиска введи название книги. \n\nРугаться и любить сюда - @lipovoowa')
 
 @run_async
 def book_query(bot, update):
