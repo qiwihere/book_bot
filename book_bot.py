@@ -22,10 +22,10 @@ def book_query(bot, update):
         result = json.loads(r.content)
         for book in result:
             r_book = requests.get(book['link'])
+            if r_book.headers['content-type'] == 'text/html; charset=utf-8':
+                continue
+
             filename = rfc6266.parse_requests_response(r_book).filename_unsafe
-
-            bot.send_message(chat_id=update.message.chat_id, text=r_book.headers['content-type'])
-
             book_file = open(filename, 'wb')
             book_file.write(r_book.content)
             book_file.close()
