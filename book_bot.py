@@ -17,9 +17,9 @@ def start_cmd(bot, update):
 
 @run_async
 def book_query(bot, update):
-    r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text})
+    r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text, 'chat_id': update.message.chat_id})
     if not r.content:
-        r = requests.get('https://flbapi.herokuapp.com/', params={'query': update.message.text})
+        r = requests.get('https://flbapi.herokuapp.com/',  params={'query': update.message.text, 'chat_id': update.message.chat_id})
     if r.content:
         result = json.loads(r.content)
         if result:
