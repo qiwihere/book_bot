@@ -24,8 +24,7 @@ def book_query(bot, update):
             r_book = requests.get(book['link'])
             filename = rfc6266.parse_requests_response(r_book).filename_unsafe
 
-            if not filename or filename == 'application.octet-stream':
-                continue
+            bot.send_message(chat_id=update.message.chat_id, text=r_book.headers['content-type'])
 
             book_file = open(filename, 'wb')
             book_file.write(r_book.content)
