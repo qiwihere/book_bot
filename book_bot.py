@@ -12,7 +12,7 @@ dispatcher = updater.dispatcher
 
 @run_async
 def start_cmd(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='365 395 книг и 132 763 автора бесплатно, быстро и удобно. Скачивайте свои любимые книги в формате EPUB. \n\n Ругаться и любить сюда - @lipovoowa')
+    bot.send_message(chat_id=update.message.chat_id, text='365 395 книг и 132 763 автора бесплатно, быстро и удобно. Скачивайте свои любимые книги в формате EPUB. \n\nРугаться и любить сюда - @lipovoowa')
 
 
 @run_async
@@ -23,6 +23,7 @@ def book_query(bot, update):
     if r.content:
         result = json.loads(r.content)
         if result:
+            bot.send_message(chat_id=update.message.chat_id, text='Хм, посмотрим, что я смог найти:')
             for book in result:
                 r_book = requests.get(book['link'])
                 if r_book.headers['content-type'] == 'text/html; charset=utf-8':
@@ -33,8 +34,8 @@ def book_query(bot, update):
                 book_file.write(r_book.content)
                 book_file.close()
 
-                bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
-                bot.send_document(chat_id=update.message.chat_id, document=open(filename, 'rb'))
+                #bot.send_message(chat_id=update.message.chat_id, text=('%s[%s]' % (book['name'], book['author'])))
+                bot.send_document(chat_id=update.message.chat_id, caption=('%s[%s]' % (book['name'], book['author'])), document=open(filename, 'rb'))
         else:
             bot.send_message(chat_id=update.message.chat_id, text='Увы, я ничего не нашел')
 
